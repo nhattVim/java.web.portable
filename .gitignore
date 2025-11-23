@@ -1,0 +1,11 @@
+server/Tomcat-11/logs/*
+!server/Tomcat-11/logs/.gitkeep
+
+server/Tomcat-11/temp/*
+!server/Tomcat-11/temp/.gitkeep
+
+server/Tomcat-11/work/*
+!server/Tomcat-11/work/.gitkeep
+
+.DS_Store
+Thumbs.db
