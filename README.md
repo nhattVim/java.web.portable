@@ -11,7 +11,7 @@ This is a simple portable Java web application. Build without Maven/Gradle.
 
 ### Prerequisites
 
-[Java 21](https://www.google.com/search?q=https://www.oracle.com/java/technologies/downloads/%23java21&authuser=1) 
+[Java 21](https://www.oracle.com/java/technologies/downloads/#java21)
 
 ### How to Run
 
