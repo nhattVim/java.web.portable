@@ -235,21 +235,31 @@ echo ------------------------------------------------
 exit /b 0
 
 :: ============================================================
-:: POWERSHELL GUI POPUP FUNCTION
+:: POWERSHELL GUI POPUP FUNCTION (LARGE SIZE)
 :: ============================================================
 :show_gui_popup
-set "PS_CMD=Add-Type -AssemblyName System.Windows.Forms; "
+set "PS_CMD=Add-Type -AssemblyName System.Windows.Forms; Add-Type -AssemblyName System.Drawing;"
 set "PS_CMD=%PS_CMD% $f = New-Object System.Windows.Forms.Form; "
-set "PS_CMD=%PS_CMD% $f.Text = 'Server Manager'; $f.StartPosition = 'CenterScreen'; $f.Width = 300; $f.Height = 220; $f.FormBorderStyle = 'FixedDialog'; $f.MaximizeBox = $false; "
-:: Button 1: Jetty
-set "PS_CMD=%PS_CMD% $b1 = New-Object System.Windows.Forms.Button; $b1.Text = 'Run Jetty (Single)'; $b1.Top = 20; $b1.Left = 50; $b1.Width = 180; $b1.Height = 30; "
+set "PS_CMD=%PS_CMD% $f.Text = 'Server Manager'; $f.StartPosition = 'CenterScreen'; $f.Width = 450; $f.Height = 320; $f.FormBorderStyle = 'FixedDialog'; $f.MaximizeBox = $false; "
+
+:: Tạo Font chữ to (Size 14, Bold)
+set "PS_CMD=%PS_CMD% $font = New-Object System.Drawing.Font('Segoe UI', 14, [System.Drawing.FontStyle]::Bold); "
+
+:: Button 1: Jetty Single
+set "PS_CMD=%PS_CMD% $b1 = New-Object System.Windows.Forms.Button; $b1.Text = 'Run Jetty (Single)'; $b1.Font = $font; "
+set "PS_CMD=%PS_CMD% $b1.Top = 25; $b1.Left = 50; $b1.Width = 330; $b1.Height = 60; "
 set "PS_CMD=%PS_CMD% $b1.Add_Click({ $host.SetShouldExit(1); $f.Close() }); $f.Controls.Add($b1); "
+
 :: Button 2: Hot Reload
-set "PS_CMD=%PS_CMD% $b2 = New-Object System.Windows.Forms.Button; $b2.Text = 'Run Jetty (Hot Reload)'; $b2.Top = 60; $b2.Left = 50; $b2.Width = 180; $b2.Height = 30; "
+set "PS_CMD=%PS_CMD% $b2 = New-Object System.Windows.Forms.Button; $b2.Text = 'Run Jetty (Hot Reload)'; $b2.Font = $font; "
+set "PS_CMD=%PS_CMD% $b2.Top = 100; $b2.Left = 50; $b2.Width = 330; $b2.Height = 60; "
 set "PS_CMD=%PS_CMD% $b2.Add_Click({ $host.SetShouldExit(2); $f.Close() }); $f.Controls.Add($b2); "
+
 :: Button 3: Tomcat
-set "PS_CMD=%PS_CMD% $b3 = New-Object System.Windows.Forms.Button; $b3.Text = 'Deploy to Tomcat'; $b3.Top = 100; $b3.Left = 50; $b3.Width = 180; $b3.Height = 30; "
+set "PS_CMD=%PS_CMD% $b3 = New-Object System.Windows.Forms.Button; $b3.Text = 'Deploy to Tomcat'; $b3.Font = $font; "
+set "PS_CMD=%PS_CMD% $b3.Top = 175; $b3.Left = 50; $b3.Width = 330; $b3.Height = 60; "
 set "PS_CMD=%PS_CMD% $b3.Add_Click({ $host.SetShouldExit(3); $f.Close() }); $f.Controls.Add($b3); "
+
 :: Show Form
 set "PS_CMD=%PS_CMD% $f.ShowDialog() | Out-Null; "
 
