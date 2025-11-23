@@ -9,6 +9,10 @@ This is a simple portable Java web application. Build without Maven/Gradle.
 - **Database:** H2 (in-memory/file-based)
 - **Web Server:** Jetty or Tomcat
 
+### Prerequisites
+
+[Java 21](https://www.google.com/search?q=https://www.oracle.com/java/technologies/downloads/%23java21&authuser=1) 
+
 ### How to Run
 
 ##### Linux / Unix
