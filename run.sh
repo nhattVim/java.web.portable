@@ -18,6 +18,10 @@ TOMCAT_LIB="$TOMCAT_HOME/lib"
 TOMCAT_BIN="$TOMCAT_HOME/bin"
 WAR_NAME="webapp"
 
+# URLs
+URL_JETTY="http://localhost:8080"
+URL_TOMCAT="http://localhost:8080/$WAR_NAME"
+
 # -----------------------------------
 # 0. Check Dependencies
 # -----------------------------------
@@ -27,7 +31,42 @@ command -v javac >/dev/null 2>&1 || {
 }
 
 # -----------------------------------
-# 1. Clean classes
+# 1. Open browser
+# -----------------------------------
+open_browser_when_ready() {
+    local url=$1
+    local port=8080
+
+    (
+        echo "[INFO] Waiting for port $port to open..."
+
+        # loop to check port (timeout 30s)
+        local count=0
+        while ! (echo >/dev/tcp/localhost/$port) >/dev/null 2>&1; do
+            sleep 0.5
+            count=$((count + 1))
+            if [ $count -ge 60 ]; then # 60 * 0.5s = 30s
+                echo "[WARN] Server took too long to start. Browser not opened."
+                exit 1
+            fi
+        done
+
+        echo "[INFO] Server is UP! Opening browser at $url..."
+
+        if [[ "$OSTYPE" == "darwin"* ]]; then
+            open "$url" # MacOS
+        elif command -v xdg-open >/dev/null; then
+            xdg-open "$url" # Linux
+        elif command -v explorer.exe >/dev/null; then
+            explorer.exe "$url" # WSL / Git Bash
+        else
+            echo "[WARN] No browser opener found."
+        fi
+    ) &
+}
+
+# -----------------------------------
+# 2. Clean classes
 # -----------------------------------
 clean_classes() {
     echo "[CLEAN] Deleting old classes..."
@@ -35,7 +74,7 @@ clean_classes() {
 }
 
 # -----------------------------------
-# 2. Compile Functions
+# 3. Compile Functions
 # -----------------------------------
 compile_jetty() {
     echo "[COMPILE] Compiling for Jetty..."
@@ -52,10 +91,13 @@ compile_tomcat() {
 }
 
 # -----------------------------------
-# 3. Run Functions
+# 4. Run Functions
 # -----------------------------------
 run_jetty() {
     echo "[RUN] Starting Jetty Embedded..."
+
+    open_browser_when_ready "$URL_JETTY"
+
     java -cp "$CLASSES_DIR:$LIB_DIR/*:$JETTY_LIB_DIR/*" src.Main
 }
 
@@ -65,6 +107,9 @@ run_jetty_hot() {
         echo "entr is required but it's not installed. Aborting."
         exit 1
     }
+
+    open_browser_when_ready "$URL_JETTY"
+
     find src -name "*.java" | entr -r \
         /bin/bash -c "rm -rf $CLASSES_DIR/* \
         && echo '[RELOAD] Re-compiling...' \
@@ -98,6 +143,9 @@ run_tomcat() {
     # Run Tomcat
     chmod +x "$TOMCAT_BIN/catalina.sh"
     echo "[RUN] Tomcat is starting... Press Ctrl+C to stop."
+
+    open_browser_when_ready "$URL_TOMCAT"
+
     "$TOMCAT_BIN/catalina.sh" run
 }
 
