@@ -6,14 +6,23 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Entity
-@Data
 @Table(name = "CONG_VIEC")
+@Getter
+@Setter
+@NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString(exclude = { "sinhVien", "nganh" })
 public class CongViec {
 
     @EmbeddedId
+    @EqualsAndHashCode.Include
     private CongViecId id;
 
     @ManyToOne
