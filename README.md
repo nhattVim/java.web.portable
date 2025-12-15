@@ -31,4 +31,4 @@ Double-click the `run.bat` file and select the server type.
 
 ### Database
 
-The application uses an H2 database. The database file is `testdb.mv.db`.
+The application uses an H2 database. The database file is `testdb.mv.db`. Access `http://localhost:8080/h2` when run with jetty or `http://localhost:8080/webapp/h2` when run with tomcat and enter `jdbc:h2:file:./testdb` to view the database.

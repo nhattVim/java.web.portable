@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Lịch khám</title>
+        <style>
+            body {
+                display: flex;
+                justify-content: center;
+                flex-direction: column;
+                align-items: center;
+                height: 100vh;
+            }
+
+            table {
+                border-collapse: collapse;
+            }
+
+            th,
+            td {
+                border: 1px solid black;
+                padding: 10px;
+            }
+
+            .top-bar {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 40px;
+            }
+
+            input {
+                padding: 4px;
+            }
+
+            button {
+                padding: 4px;
+                margin-left: 20px;
+            }
+
+            .add-form {
+                border: 1px solid black;
+                padding: 20px;
+                border-radius: 5px;
+                margin-bottom: 50px;
+            }
+
+            input[type="text"],
+            input[type="email"],
+            input[type="date"],
+            select {
+                padding: 4px;
+                margin-bottom: 10px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+            }
+
+            input[type="submit"] {
+                padding: 10px 20px;
+                background-color: #008effff;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+            label {
+                display: inline-block;
+                width: 130px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <h1>Thêm lịch khám</h1>
+
+        <form
+            class="add-form"
+            th:action="@{/lich-kham/add}"
+            th:object="${lichKham}"
+            method="post"
+        >
+            <label>Mã khám:</label>
+            <input type="text" th:field="*{maKham}" required />
+            <br />
+            <label>Ngày khám:</label>
+            <input type="date" th:field="*{ngayKham}" />
+            <br />
+            <label>Tên bác sĩ:</label>
+            <input type="text" th:field="*{tenBacSi}" />
+            <br />
+            <label>Tình trạng sức khỏe:</label>
+            <input type="text" th:field="*{tinhTrangSucKhoe}" />
+            <br />
+            <label>Chuẩn đoán và hướng điểu trị:</label>
+            <input type="text" th:field="*{chuanDoanVaHuongDieuTri}" />
+            <br />
+
+            <label>Pet:</label>
+            <select name="maPetSelect">
+                <option
+                    th:each="n : ${petList}"
+                    th:value="${n.maPet}"
+                    th:text="${n.ten}"
+                ></option>
+            </select>
+
+            <div class="buttons">
+                <input type="submit" value="Submit" />
+            </div>
+        </form>
+
+        <h1>Lịch khám</h1>
+
+        <div class="top-bar">
+            <form th:action="@{/lich-kham/search}" method="get">
+                <label for="search">Search:</label>
+                <input id="search" name="search" />
+                <button type="submit" class="btn">search</button>
+            </form>
+            <button type="button" th:onclick="|window.location.href='@{/}'|">
+                Quay lại
+            </button>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Mã khám</th>
+                    <th>Ngày khám</th>
+                    <th>Tên bác sĩ</th>
+                    <th>Tình trạng sức khỏe</th>
+                    <th>Chuẩn đoán và hướng điểu trị</th>
+                    <th>Pet</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="x : ${lichKhamList}">
+                    <td th:text="${x.maKham}"></td>
+                    <td th:text="${x.ngayKham}"></td>
+                    <td th:text="${x.tenBacSi}"></td>
+                    <td th:text="${x.tinhTrangSucKhoe}"></td>
+                    <td th:text="${x.chuanDoanVaHuongDieuTri}"></td>
+                    <td th:text="${x.pet.ten}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

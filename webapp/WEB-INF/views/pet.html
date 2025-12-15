@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Thống kê pet</title>
+        <style>
+            table {
+                border-collapse: collapse;
+            }
+
+            th,
+            td {
+                border: 1px solid black;
+                padding: 10px;
+            }
+
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+                height: 100vh;
+            }
+
+            .top-bar {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 40px;
+            }
+
+            input {
+                padding: 4px;
+            }
+
+            button {
+                padding: 4px;
+                margin-left: 20px;
+            }
+
+            .add-form {
+                border: 1px solid black;
+                padding: 20px;
+                border-radius: 5px;
+                margin-bottom: 50px;
+            }
+
+            input[type="text"],
+            input[type="email"],
+            input[type="date"],
+            select {
+                padding: 4px;
+                margin-bottom: 10px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+            }
+
+            input[type="submit"] {
+                padding: 10px 20px;
+                background-color: #008effff;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+            input[type="button"] {
+                padding: 10px 20px;
+                background-color: #00d700;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+            label {
+                display: inline-block;
+                width: 130px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <h1>Thêm pet</h1>
+        <form
+            class="add-form"
+            th:action="@{/pet/add}"
+            th:object="${pet}"
+            method="post"
+        >
+            <label>Mã Pet:</label>
+            <input type="text" th:field="*{maPet}" required />
+            <br />
+            <label>Họ tên:</label>
+            <input type="text" th:field="*{ten}" />
+            <br />
+            <label>Ngày sinh:</label>
+            <input type="date" th:field="*{ngaySinh}" />
+            <br />
+            <label>Loại:</label>
+            <input type="text" th:field="*{type}" />
+            <br />
+            <label>Giống loài:</label>
+            <input type="text" th:field="*{subType}" />
+            <br />
+
+            <label>Khách hàng:</label>
+            <select name="maKhanhHangSelect">
+                <option
+                    th:each="n : ${customerList}"
+                    th:value="${n.maKhanhHang}"
+                    th:text="${n.ten}"
+                ></option>
+            </select>
+
+            <div class="buttons">
+                <input type="submit" value="Submit" />
+            </div>
+        </form>
+
+        <h1>Danh sách pet</h1>
+
+        <div class="top-bar">
+            <form th:action="@{/pet/search}" method="get">
+                <label for="search">Search:</label>
+                <input id="search" name="search" />
+                <button type="submit" class="btn">search</button>
+            </form>
+            <button
+                type="button"
+                th:onclick="|window.location.href='@{/lich-kham}'|"
+            >
+                Lịch khám
+            </button>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Mã Pet</th>
+                    <th>Tên</th>
+                    <th>Ngày sinh</th>
+                    <th>Loại</th>
+                    <th>Giống loài</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="s : ${petList}">
+                    <td th:text="${s.maPet}"></td>
+                    <td th:text="${s.ten}"></td>
+                    <td th:text="${s.ngaySinh}"></td>
+                    <td th:text="${s.type}"></td>
+                    <td th:text="${s.subType}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>
